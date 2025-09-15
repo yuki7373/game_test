@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ジャグラー風スロット 修正版</title>
+<title>まゆちゃん専用スロット～</title>
 <style>
 body {
   margin:0; padding:0;
@@ -116,7 +116,7 @@ body {
 const reelSymbols = [
   ['🍒','🍋','🍉','🍊','⭐','ま'],
   ['🍒','🍋','🍉','🍊','⭐','ゆ'],
-  ['🍒','🍋','🍉','🍊','⭐','🦍']
+  ['🍒','🍋','🍉','🍊','⭐','💖']
 ];
 
 let spinning = [false,false,false];
@@ -200,7 +200,7 @@ function checkResult(){
     final.push(symbol);
   });
 
-  const rinKaWin = final[0]==='ま' && final[1]==='ゆ' && final[2]==='🦍';
+  const rinKaWin = final[0]==='ま' && final[1]==='ゆ' && final[2]==='💖';
   const lamp = document.getElementById('gogoLamp');
 
   if(rinKaWin){
