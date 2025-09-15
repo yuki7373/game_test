@@ -22,7 +22,7 @@ body {
   margin-bottom:10px; height:180px;
   overflow:hidden;
   border:3px solid #555; border-radius:10px; background:#000;
-  position: relative; /* 有効ライン用に必要 */
+  position: relative; /* 有効ライン用 */
 }
 .reel {
   flex:1; overflow:hidden;
@@ -47,9 +47,19 @@ body {
   border:none; background:gold; color:#000; cursor:pointer;
 }
 .lever {
-  width:40px; height:80px;
-  background:red; border-radius:20px;
-  margin:0 auto 10px; cursor:pointer;
+  width:100px;          /* 幅を大きく */
+  height:50px;          /* 高さを調整 */
+  background:red;
+  border-radius:10px;
+  margin:0 auto 10px;
+  cursor:pointer;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+  font-size:18px;
+  color:#fff;
+  user-select:none;
 }
 .gogo-lamp {
   position:absolute; left:10px; bottom:10px;
@@ -61,8 +71,7 @@ body {
 .gogo-lamp.on {
   background:yellow; box-shadow:0 0 20px yellow;
 }
-
-/* 🎯 有効ライン */
+/* 有効ライン */
 .hit-line {
   position: absolute;
   top: 50%;
@@ -93,13 +102,13 @@ body {
     <button onclick="stopReel(2)">STOP 3</button>
   </div>
 
-  <div class="lever" onclick="startSpin()"></div>
+  <div class="lever" onclick="startSpin()">START</div>
   <p id="result"></p>
   <div class="gogo-lamp" id="gogoLamp"></div>
 </div>
 
 <script>
-// 左・中・右それぞれのリール用シンボル
+// 左・中・右のリール用シンボル
 const reelSymbols = [
   ['🍒','🍋','🍉','🍊','⭐','ま'],
   ['🍒','🍋','🍉','🍊','⭐','ゆ'],
@@ -125,7 +134,7 @@ function initReels(){
         reel.appendChild(div);
       });
     }
-    const offset = rowHeight * 9; 
+    const offset = rowHeight * 9;
     positions[i] = offset;
     reel.dataset.offset = offset;
     reel.style.top = (-positions[i]) + 'px';
