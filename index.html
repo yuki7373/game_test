@@ -47,8 +47,8 @@ body {
   border:none; background:gold; color:#000; cursor:pointer;
 }
 .lever {
-  width:100px;          /* 幅を大きく */
-  height:50px;          /* 高さを調整 */
+  width:100px;
+  height:50px;
   background:red;
   border-radius:10px;
   margin:0 auto 10px;
@@ -63,15 +63,22 @@ body {
 }
 .gogo-lamp {
   position:absolute; left:10px; bottom:10px;
-  width:30px; height:30px;
+  width:60px; height:60px;  /* サイズを大きく */
   background:#444; border-radius:50%;
   box-shadow:0 0 10px #000;
   transition:0.3s;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+  font-weight:bold;
+  font-size:16px;
+  user-select:none;
 }
 .gogo-lamp.on {
-  background:yellow; box-shadow:0 0 20px yellow;
+  background:yellow;
+  box-shadow:0 0 30px yellow;
 }
-/* 有効ライン */
 .hit-line {
   position: absolute;
   top: 50%;
@@ -91,8 +98,6 @@ body {
     <div class="reel"><div class="reel-inner" id="reel1"></div></div>
     <div class="reel"><div class="reel-inner" id="reel2"></div></div>
     <div class="reel"><div class="reel-inner" id="reel3"></div></div>
-
-    <!-- 有効ライン -->
     <div class="hit-line"></div>
   </div>
 
@@ -108,11 +113,10 @@ body {
 </div>
 
 <script>
-// 左・中・右のリール用シンボル
 const reelSymbols = [
   ['🍒','🍋','🍉','🍊','⭐','ま'],
   ['🍒','🍋','🍉','🍊','⭐','ゆ'],
-  ['🍒','🍋','🍉','🍊','⭐','💖']
+  ['🍒','🍋','🍉','🍊','⭐','🦍']
 ];
 
 let spinning = [false,false,false];
@@ -142,36 +146,32 @@ function initReels(){
 }
 initReels();
 
-// スピン開始
 function startSpin(){
   document.getElementById('result').innerText="";
-  document.getElementById('gogoLamp').classList.remove('on');
+  const lamp = document.getElementById('gogoLamp');
+  lamp.classList.remove('on');
+  lamp.innerText = ""; // 文字リセット
   for(let i=0;i<3;i++){
     spinning[i]=true;
     spinReel(i);
   }
 }
 
-// リール回転
 function spinReel(index){
   const reel=document.getElementById('reel'+(index+1));
-
   function animate(){
     if(!spinning[index]) return;
     positions[index] -= reelSpeed;
-
     const offset = parseInt(reel.dataset.offset);
     if(positions[index] <= 180){
       positions[index] = offset;
     }
-
     reel.style.top = (-positions[index])+'px';
     animFrame[index]=requestAnimationFrame(animate);
   }
   animate();
 }
 
-// STOP処理
 function stopReel(index){
   if(!spinning[index]) return;
   spinning[index]=false;
@@ -191,7 +191,6 @@ function stopReel(index){
   checkResult();
 }
 
-// 結果判定
 function checkResult(){
   if(spinning.some(s=>s)) return;
   const final=[];
@@ -201,16 +200,23 @@ function checkResult(){
     final.push(symbol);
   });
 
-  const rinKaWin = final[0]==='ま' && final[1]==='ゆ' && final[2]==='💖';
+  const rinKaWin = final[0]==='ま' && final[1]==='ゆ' && final[2]==='🦍';
+  const lamp = document.getElementById('gogoLamp');
 
   if(rinKaWin){
-    document.getElementById('result').innerText=" ちゅっ💖";
-    document.getElementById('gogoLamp').classList.add('on');
+    document.getElementById('result').innerText=さっすがー！💖";
+    lamp.classList.add('on');
+    lamp.style.color = "#000"; // ← 黒文字に変更
+    lamp.innerText = "ちゅっ"; // 光る文字
   } else if(final[0]===final[1] && final[1]===final[2]){
-    document.getElementById('result').innerText="🎉 ナイッスゥー！ 🎉";
-    document.getElementById('gogoLamp').classList.add('on');
+    document.getElementById('result').innerText="codやってるだけあるなぁ～";
+    lamp.classList.add('on');
+    lamp.style.color = "#000"; // ← 黒文字に変更
+    lamp.innerText = ""; // 光る文字
   } else {
-    document.getElementById('result').innerText="ハズレ…";
+    document.getElementById('result').innerText="はずれだバーカ！";
+    lamp.innerText = "";
+    lamp.classList.remove('on');
   }
 }
 </script>
