@@ -140,7 +140,7 @@ function spinReel(index){
 
     // 🎯 ループするときも offset を保つ
     const offset = parseInt(reel.dataset.offset);
-    if(positions[index] <= -(reelLength) + offset){
+    if(positions[index] <= -(reelLength/2) + offset){
       positions[index] = offset;
     }
 
