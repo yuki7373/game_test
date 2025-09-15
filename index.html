@@ -22,6 +22,7 @@ body {
   margin-bottom:10px; height:180px;
   overflow:hidden;
   border:3px solid #555; border-radius:10px; background:#000;
+  position: relative; /* 有効ライン用に必要 */
 }
 .reel {
   flex:1; overflow:hidden;
@@ -60,6 +61,18 @@ body {
 .gogo-lamp.on {
   background:yellow; box-shadow:0 0 20px yellow;
 }
+
+/* 🎯 有効ライン */
+.hit-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: red;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
@@ -69,6 +82,9 @@ body {
     <div class="reel"><div class="reel-inner" id="reel1"></div></div>
     <div class="reel"><div class="reel-inner" id="reel2"></div></div>
     <div class="reel"><div class="reel-inner" id="reel3"></div></div>
+
+    <!-- 有効ライン -->
+    <div class="hit-line"></div>
   </div>
 
   <div class="buttons">
@@ -85,18 +101,16 @@ body {
 <script>
 // 左・中・右それぞれのリール用シンボル
 const reelSymbols = [
-  ['🍒','🍋','🍉','🍊','⭐','ま'], // 左
-  ['🍒','🍋','🍉','🍊','⭐','ゆ'], // 中
-  ['🍒','🍋','🍉','🍊','⭐','💖']  // 右
+  ['🍒','🍋','🍉','🍊','⭐','ま'],
+  ['🍒','🍋','🍉','🍊','⭐','ゆ'],
+  ['🍒','🍋','🍉','🍊','⭐','💖']
 ];
 
 let spinning = [false,false,false];
 let animFrame=[null,null,null];
 let positions=[0,0,0];
 const rowHeight = 60;
-const reelLength = reelSymbols[0].length * rowHeight * 2; // 2周分
-
-// リール回転スピード
+const reelLength = reelSymbols[0].length * rowHeight * 2;
 const reelSpeed = 8;
 
 // 初期化
@@ -111,10 +125,9 @@ function initReels(){
         reel.appendChild(div);
       });
     }
-    // 🎯 初期オフセットを設定
-    const offset = rowHeight * 9;  // ←ここで「どれくらい上から」にするか決める
+    const offset = rowHeight * 9; 
     positions[i] = offset;
-    reel.dataset.offset = offset; // ←ループ時にも使えるように保存
+    reel.dataset.offset = offset;
     reel.style.top = (-positions[i]) + 'px';
   }
 }
@@ -138,7 +151,6 @@ function spinReel(index){
     if(!spinning[index]) return;
     positions[index] -= reelSpeed;
 
-    // 🎯 ループするときも offset を保つ
     const offset = parseInt(reel.dataset.offset);
     if(positions[index] <= 180){
       positions[index] = offset;
