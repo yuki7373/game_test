@@ -96,8 +96,8 @@ let positions=[0,0,0];
 const rowHeight = 60;
 const reelLength = reelSymbols[0].length * rowHeight * 2; // 2周分
 
-// リール回転スピード（大きいほど速くなる）
-const reelSpeed = 8; // ←ここを上げればスピードアップ可能
+// リール回転スピード
+const reelSpeed = 8;
 
 // 初期化
 function initReels(){
@@ -111,6 +111,9 @@ function initReels(){
         reel.appendChild(div);
       });
     }
+    // 🎯 初期ポジションを少し上から開始
+    positions[i] = rowHeight * Math.floor(reelSymbols[i].length / 2);
+    reel.style.top = (-positions[i]) + 'px';
   }
 }
 initReels();
@@ -131,9 +134,14 @@ function spinReel(index){
 
   function animate(){
     if(!spinning[index]) return;
-    positions[index]-=reelSpeed;
-    if(positions[index]<=-reelLength/2) positions[index]=0; // ループ
-    reel.style.top=(-positions[index])+'px';
+    positions[index] -= reelSpeed;
+
+    // 🎯 ループを半周ぶんで処理（シームレスに繋がる）
+    if(positions[index] <= -reelLength/2){
+      positions[index] += reelLength/2;
+    }
+
+    reel.style.top = (-positions[index])+'px';
     animFrame[index]=requestAnimationFrame(animate);
   }
   animate();
