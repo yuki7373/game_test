@@ -111,8 +111,10 @@ function initReels(){
         reel.appendChild(div);
       });
     }
-    // 🎯 初期ポジションを少し上から開始
-    positions[i] = rowHeight * Math.floor(reelSymbols[i].length / 2);
+    // 🎯 初期オフセットを設定
+    const offset = rowHeight * 2;  // ←ここで「どれくらい上から」にするか決める
+    positions[i] = offset;
+    reel.dataset.offset = offset; // ←ループ時にも使えるように保存
     reel.style.top = (-positions[i]) + 'px';
   }
 }
@@ -136,9 +138,10 @@ function spinReel(index){
     if(!spinning[index]) return;
     positions[index] -= reelSpeed;
 
-    // 🎯 ループを半周ぶんで処理（シームレスに繋がる）
-    if(positions[index] <= -reelLength/2){
-      positions[index] += reelLength/2;
+    // 🎯 ループするときも offset を保つ
+    const offset = parseInt(reel.dataset.offset);
+    if(positions[index] <= -(reelLength/2) + offset){
+      positions[index] = offset;
     }
 
     reel.style.top = (-positions[index])+'px';
