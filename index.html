@@ -131,8 +131,8 @@ function spinReel(index){
 
   function animate(){
     if(!spinning[index]) return;
-    positions[index]+=reelSpeed;
-    if(positions[index]>=reelLength/2) positions[index]=0; // ループ
+    positions[index]-=reelSpeed;
+    if(positions[index]<=-reelLength/2) positions[index]=0; // ループ
     reel.style.top=(-positions[index])+'px';
     animFrame[index]=requestAnimationFrame(animate);
   }
